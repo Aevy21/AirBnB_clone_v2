@@ -1,36 +1,32 @@
 #!/usr/bin/python3
-"""
-This Fabric file generates a .tgz archive from the contents  of the
-web_static folder
-"""
-
-
-from fabric.operations import local
+""" This script generates a .tgz archive from the web_static folder """
+from fabric.api import local
 from datetime import datetime
-from fabric.context_managers import lcd
 
 def do_pack():
-    """
-    Generates a .tgz archive from the contents of the web_static folder.
-
-    Returns:
-        str: Archive path if the archive has been correctly generated, otherwise None.
-    """
-    # Get current timestamp
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    """ Generates a .tgz archive """
     
-    # Define archive name
-    archive_name = "web_static_{}.tgz".format(timestamp)
+    # Get current timestamp
+    current_time = datetime.now().strftime("%Y%m%d%H%M%S")
+    
+    # Define archive name with the specified format
+    archive_name = "web_static_{}.tgz".format(current_time)
+    
+    # Define archive path
+    archive_path = "versions/{}".format(archive_name)
+    
+    print("Packing web_static to {}".format(archive_path))
     
     # Create versions folder if it doesn't exist
     local("mkdir -p versions")
     
     # Create tgz archive
-    with lcd("web_static"):
-        result = local("tar -czvf ../versions/{} .".format(archive_name))
-        
+    result = local("tar -cvzf {} web_static".format(archive_path), capture=True)
+    
     # Check if archive was created successfully
-    if result.return_code == 0:
-        return "versions/{}".format(archive_name)
+    if result.succeeded:
+        print("Successfully packed web_static to {}".format(archive_path))
+        return archive_path
     else:
+        print("Failed to pack web_static")
         return None
