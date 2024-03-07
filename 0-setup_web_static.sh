@@ -34,7 +34,7 @@ echo "<html>
 </html>" | sudo tee /data/web_static/releases/test/index.html >/dev/null
 
 # Create or recreate symbolic link
-sudo ln -sf /data/web_static/releases/test /data/web_static/current
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Ensure ownership of the symbolic link
 sudo chown -h ubuntu:ubuntu /data/web_static/current
