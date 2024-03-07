@@ -45,6 +45,21 @@ def do_pack():
         print("Failed to pack web_static")
         return None
 
+def deploy_archive():
+    # Generate the archive
+    archive_path = do_pack()
+
+    # Check if archive was generated successfully
+    if archive_path:
+        # Deploy the archive
+        if do_deploy(archive_path):
+            print("Archive deployed successfully.")
+        else:
+            print("Failed to deploy archive.")
+    else:
+        print("Failed to generate archive.")
+
+
 def do_deploy(archive_path):
     """
     Distributes an archive to web servers.
@@ -65,6 +80,11 @@ def do_deploy(archive_path):
     for host in env.hosts:
         with Connection(host) as c:
             c.put(archive_path, "/tmp/{}".format(archive_filename))
+
+            # Check if the archive exists in the /tmp/ directory
+            if not c.run("test -f /tmp/{}".format(archive_filename), warn=True).ok:
+                print("Archive not found on server.")
+                return False
 
             c.run("mkdir -p /data/web_static/releases/{}".format(archive_folder))
             c.run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/".format(archive_filename, archive_folder))
