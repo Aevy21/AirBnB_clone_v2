@@ -6,6 +6,7 @@ and distributes it to web servers using Fabric.
 
 
 from fabric.api import *
+from fabric.api import runs_once
 from fabric.api import env
 from fabric.api import local
 from os.path import exists
