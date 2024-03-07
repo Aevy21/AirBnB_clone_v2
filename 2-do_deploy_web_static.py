@@ -4,6 +4,7 @@ This script generates a .tgz archive from the web_static folder
 and distributes it to web servers using Fabric.
 """
 
+
 from fabric.api import *
 from fabric.api import env
 from fabric.api import local
@@ -18,7 +19,7 @@ def do_pack():
     Generates a .tgz archive from the web_static folder.
 
     Returns:
-        str: Archive path if the archive has been correctly generated, otherwise None.
+        str: Archive path if archive has been generated, otherwise None.
     """
     # Get current timestamp
     current_time = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -35,7 +36,7 @@ def do_pack():
     local("mkdir -p versions")
 
     # Create tgz archive
-    result = local("tar -cvzf {} web_static".format(archive_path), capture=True)
+    result = local("tar -cvzf {} web_static".format(archive_path))
 
     # Check if archive was created successfully
     if result.succeeded:
