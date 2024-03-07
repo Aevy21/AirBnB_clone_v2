@@ -3,6 +3,7 @@
 from fabric.api import local
 from datetime import datetime
 
+
 def do_pack():
     """ Generates a .tgz archive """
 
@@ -21,11 +22,11 @@ def do_pack():
     local("mkdir -p versions")
 
     # Create tgz archive
-    result = local("tar -cvzf {} web_static".format(archive_path), capture=True)
+    result = local("tar -cvzf {} web_static".format(archive_path))
 
     # Check if archive was created successfully
     if result.succeeded:
-        print("web_static packed: {} -> {}Bytes".format(archive_path, result.stdout.split()[4]))
+        print("web_static packed: {} ".format(archive_path))
         return archive_path
     else:
         print("Failed to pack web_static")
