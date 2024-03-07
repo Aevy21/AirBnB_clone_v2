@@ -5,8 +5,9 @@ web_static folder
 """
 
 
-from fabric.api import local
+from fabric.operations import local
 from datetime import datetime
+from fabric.context_managers import lcd
 
 def do_pack():
     """
