@@ -1,49 +1,50 @@
 #!/usr/bin/env bash
-# This script sets up web servers for deployment of web_static
+# This script sets up web servers for the deployment of web_static.
 
-# update package lists for upgrades
-sudo apt-get update
+# Install Nginx if it's not already installed
+if ! [ -x "$(command -v nginx)" ]; then
+  sudo apt-get update
+  sudo apt-get install nginx -y
+fi
 
-# Install nginx
-sudo apt-get install -y nginx
+# Define array for folders to be created
+folders_to_create=(
+  "/data/"
+  "/data/web_static/"
+  "/data/web_static/releases/"
+  "/data/web_static/shared/"
+  "/data/web_static/releases/test/"
+)
 
-# start Nginx
-sudo service nginx start
+# Create necessary directories if they don't exist
+for folder in "${folders_to_create[@]}"; do
+  sudo mkdir -p "$folder"
+done
 
-# create directories if they dont exist
-sudo mkdir -p /data/web_static/{releases/test,shared}
+# Create a fake HTML file
+ echo " <html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html> "| sudo tee /data/web_static/releases/test/index.html >/dev/null
 
-# create a simple index.html file
-cat <<EOF | sudo tee /data/web_static/releases/test/index.html
-<html>
-    <head>
-    </head>
-    <body>
-        Holberton School
-    </body>
-</html>
+# Create or recreate symbolic link
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+
+# Update Nginx configuration
+cat << EOF | sudo tee /etc/nginx/sites-available/default >/dev/null
+server {
+    listen 80;
+    listen [::]:80;
+    server_name aevycreations.tech;
+
+    location /hbnb_static/ {
+        alias /data/web_static/current/;
+    }
+}
 EOF
 
-# create a symbolic link
-sudo ln -sf "/data/web_static/releases/test/" "/data/web_static/current"
-
-chown -R  ubuntu:ubuntu "/data/"
-
-# Backup the original configuration file
-sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-
-# update the Nginx configuration
-echo "
-    server {
-        listen 80;
-        listen [::]:80;
-
-        server_name taurai.tech;
-
-        location /hbnb_static/ {
-            alias /data/web_static/current/;
-        }
-    }" | sudo tee /etc/nginx/sites-available/default
-
-# restart the nginx server
+# Restart Nginx
 sudo service nginx restart
