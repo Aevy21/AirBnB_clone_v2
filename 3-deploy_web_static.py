@@ -86,4 +86,5 @@ def deploy():
     new_archivepath = do_pack()
     if not new_archivepath:
         return False
-    return do_deploy(new_archivepath)
+    deploy_result = do_deploy(new_archivepath)
+    return deploy_result
