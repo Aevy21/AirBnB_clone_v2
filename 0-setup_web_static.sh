@@ -24,14 +24,9 @@ done
 # Give ownership of the /data/ folder to the ubuntu user AND group recursively
 sudo chown -R ubuntu:ubuntu /data/
 
-# Create a fake HTML file
-echo "<html>
-<head>
-</head>
-<body>
-  Holberton School
-</body>
-</html>" | sudo tee /data/web_static/releases/test/index.html >/dev/null
+
+# create an html file with fake content to test configuration
+echo -e "<html>\n\t<head>\n\t</head>\n\t<body>\n\t\t<h1>Hello Ms Aevy </h1>\n\t</body>\n</html>" > /data/web_static/releases/test/index.html
 
 # Create or recreate symbolic link
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
