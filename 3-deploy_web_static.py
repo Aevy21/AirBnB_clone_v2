@@ -83,7 +83,7 @@ def deploy():
     Main deployment function.
     Calls do_pack() to create the archive and do_deploy() to distribute it.
     """
-    new_archivepath  = do_pack()
+    new_archivepath = do_pack()
     if not new_archivepath:
         return False
     return do_deploy(new_archivepath)
