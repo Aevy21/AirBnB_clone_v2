@@ -14,6 +14,7 @@ from datetime import datetime
 env.hosts = ["54.165.47.248", "100.25.193.107"]
 env.user = "ubuntu"
 
+
 def do_pack():
     """
     Generates a .tgz archive from the web_static folder.
