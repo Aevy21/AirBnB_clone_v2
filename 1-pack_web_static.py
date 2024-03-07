@@ -8,18 +8,28 @@ web_static folder
 from fabric.api import local
 from datetime import datetime
 
-
 def do_pack():
-    """This function generates a .tgz archive"""
-    local('mkdir -p versions')
+    """
+    Generates a .tgz archive from the contents of the web_static folder.
 
-    # generate the .tgz archive
-    time = datetime.now().strftime('%Y%m%d%H%M%S')
-    a_path = 'versions/web_static_{}.tgz'.format(time)
-    result = local('tar -czvf {} web_static'.format(a_path), capture=False)
-
-    # if successful return the archive path
-    if result.succeeded:
-        return a_path
+    Returns:
+        str: Archive path if the archive has been correctly generated, otherwise None.
+    """
+    # Get current timestamp
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    
+    # Define archive name
+    archive_name = "web_static_{}.tgz".format(timestamp)
+    
+    # Create versions folder if it doesn't exist
+    local("mkdir -p versions")
+    
+    # Create tgz archive
+    with lcd("web_static"):
+        result = local("tar -czvf ../versions/{} .".format(archive_name))
+        
+    # Check if archive was created successfully
+    if result.return_code == 0:
+        return "versions/{}".format(archive_name)
     else:
         return None
