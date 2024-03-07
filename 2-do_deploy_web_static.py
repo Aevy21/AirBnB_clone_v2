@@ -45,56 +45,31 @@ def do_pack():
         print("Failed to pack web_static")
         return None
 
-def deploy_archive():
-    # Generate the archive
-    archive_path = do_pack()
-
-    # Check if archive was generated successfully
-    if archive_path:
-        # Deploy the archive
-        if do_deploy(archive_path):
-            print("Archive deployed successfully.")
-        else:
-            print("Failed to deploy archive.")
-    else:
-        print("Failed to generate archive.")
-
 
 def do_deploy(archive_path):
-    """
-    Distributes an archive to web servers.
+    """ Distributes an archive to webserver """
 
-    Args:
-        archive_path (str): Path to the archive.
-
-    Returns:
-        bool: True if all operations have been done correctly, otherwise False.
-    """
     if not exists(archive_path):
-        print("Archive doesn't exist.")
         return False
 
-    archive_filename = archive_path.split("/")[-1]
-    archive_folder = archive_filename.replace(".tgz", "")
+    print("Deploying new version")
 
-    for host in env.hosts:
-        with Connection(host) as c:
-            c.put(archive_path, "/tmp/{}".format(archive_filename))
+    archive_name = archive_path.split("/")[-1]
+    folder_name = archive_name[: -4]
+    dir_path = "/data/web_static/releases/{}".format(folder_name)
 
-            # Check if the archive exists in the /tmp/ directory
-            if not c.run("test -f /tmp/{}".format(archive_filename), warn=True).ok:
-                print("Archive not found on server.")
-                return False
+    put(archive_path, "/tmp/")
+    run("mkdir -p {}".format(dir_path))
+    result = run("tar -xzf /tmp/{} -C {}".format(archive_name, dir_path))
 
-            c.run("mkdir -p /data/web_static/releases/{}".format(archive_folder))
-            c.run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/".format(archive_filename, archive_folder))
-            c.run("rm /tmp/{}".format(archive_filename))
-            c.run("mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/".format(archive_folder, archive_folder))
-            c.run("rm -rf /data/web_static/releases/{}/web_static".format(archive_folder))
-            c.run("rm -rf /data/web_static/current")
-            c.run("ln -s /data/web_static/releases/{}/ /data/web_static/current".format(archive_folder))
+    if result.failed:
+        return False
+
+    run("cp -r {}/web_static/* {}".format(dir_path, dir_path))
+    run("rm -rf /tmp/{} {}/web_static".format(archive_name, dir_path))
+    run("rm -rf /data/web_static/current")
+    run("ln -s {} /data/web_static/current".format(dir_path))
+
+    print("New version deployed!")
 
     return True
-    
-deploy_archive()
-
