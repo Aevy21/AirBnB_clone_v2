@@ -64,7 +64,7 @@ def do_deploy(archive_path):
 
     for host in env.hosts:
         with Connection(host) as c:
-            c.put(archive_path, "/tmp")
+            c.put(archive_path, "/tmp/{}".format(archive_filename))
 
             c.run("mkdir -p /data/web_static/releases/{}".format(archive_folder))
             c.run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/".format(archive_filename, archive_folder))
