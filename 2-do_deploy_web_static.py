@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 This script generates a .tgz archive from the web_static folder
 and distributes it to web servers using Fabric.
