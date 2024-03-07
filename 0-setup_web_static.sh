@@ -21,17 +21,23 @@ for folder in "${folders_to_create[@]}"; do
   sudo mkdir -p "$folder"
 done
 
+# Give ownership of the /data/ folder to the ubuntu user AND group recursively
+sudo chown -R ubuntu:ubuntu /data/
+
 # Create a fake HTML file
- echo " <html>
-  <head>
-  </head>
-  <body>
-    Holberton School
-  </body>
-</html> "| sudo tee /data/web_static/releases/test/index.html >/dev/null
+echo "<html>
+<head>
+</head>
+<body>
+  Holberton School
+</body>
+</html>" | sudo tee /data/web_static/releases/test/index.html >/dev/null
 
 # Create or recreate symbolic link
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+sudo ln -sf /data/web_static/releases/test /data/web_static/current
+
+# Ensure ownership of the symbolic link
+sudo chown -h ubuntu:ubuntu /data/web_static/current
 
 # Update Nginx configuration
 cat << EOF | sudo tee /etc/nginx/sites-available/default >/dev/null
