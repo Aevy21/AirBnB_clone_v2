@@ -95,3 +95,6 @@ def do_deploy(archive_path):
             c.run("ln -s /data/web_static/releases/{}/ /data/web_static/current".format(archive_folder))
 
     return True
+    
+deploy_archive()
+
