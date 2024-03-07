@@ -4,7 +4,8 @@ This script generates a .tgz archive from the web_static folder
 and distributes it to web servers using Fabric.
 """
 
-from fabric import task, Connection, env, run
+from fabric.api import *
+from fabric.api import env
 from fabric.api import local
 from os.path import exists
 from datetime import datetime
