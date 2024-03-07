@@ -25,7 +25,7 @@ def do_pack():
     
     # Check if archive was created successfully
     if result.succeeded:
-        print("Successfully packed web_static to {}".format(archive_path))
+        print("web_static packed: {} -> {}Bytes".format(archive_path, result.stdout.split()[-1]))
         return archive_path
     else:
         print("Failed to pack web_static")
