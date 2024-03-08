@@ -91,13 +91,13 @@ def deploy():
     print("Local archive created successfully : {}".format(local_archive_path))
 
     # Extract archive locally
-    extraction_path = "/tmp/"
-    local("mkdir -p {}".format(extraction_path))
-    local("tar -xzf {} -C {}".format(local_archive_path, extraction_path))
+    extract_path = "/tmp/"
+    local("mkdir -p {}".format(extract_path))
+    local("tar -xzf {} -C {}".format(local_archive_path, extract_path))
 
     # Update current symlink to point the new version
     local("rm -rf /data/web_static/current")
-    local("ln -s {}/web_static /data/web_static/current".format(extraction_path))
+    local("ln -s {}/web_static /data/web_static/current".format(extract_path))
 
     print("Deployment successful!")
     return True
