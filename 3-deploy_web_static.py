@@ -88,3 +88,5 @@ def deploy():
         return False
     deploy_result = do_deploy(new_archivepath)
     return deploy_result
+
+deploy()
