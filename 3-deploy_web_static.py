@@ -76,6 +76,8 @@ def do_deploy(archive_path):
     print("New version deployed!")
 
     return True
+
+
 def deploy():
     """
     Main deployment function.
@@ -83,7 +85,7 @@ def deploy():
     """
     local_archive_path = do_pack()
     if not local_archive_path:
-        print("Failed to create archive. Deployment aborted.")
+        print("Failed to create archive.")
         return False
 
     print("Local archive created successfully at: {}".format(local_archive_path))
@@ -93,12 +95,13 @@ def deploy():
     local("mkdir -p {}".format(extraction_path))
     local("tar -xzf {} -C {}".format(local_archive_path, extraction_path))
 
-    # Update current symlink to point to the new version
+    # Update current symlink to point the new version
     local("rm -rf /data/web_static/current")
     local("ln -s {}/web_static /data/web_static/current".format(extraction_path))
 
     print("Deployment successful!")
     return True
+
 
 # Call deploy function
 deploy()
