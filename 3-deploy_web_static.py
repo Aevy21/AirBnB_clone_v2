@@ -97,7 +97,7 @@ def deploy():
 
     # Update current symlink to point the new version
     local("rm -rf /data/web_static/current")
-    local(f"ln -s {extraction_path}/web_static /data/web_static/current")
+    local("ln -s {}/web_static /data/web_static/current".format(extraction_path))
 
     print("Deployment successful!")
     return True
