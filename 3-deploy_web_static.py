@@ -89,7 +89,7 @@ def deploy():
     print("Local archive created successfully at: {}".format(local_archive_path))
 
     # Extract archive locally
-    extraction_path = "extracted_version"
+    extraction_path = "/tmp/"
     local("mkdir -p {}".format(extraction_path))
     local("tar -xzf {} -C {}".format(local_archive_path, extraction_path))
 
