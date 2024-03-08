@@ -88,7 +88,7 @@ def deploy():
         print("Failed to create archive.")
         return False
 
-    print("Local archive created successfully at: {}".format(local_archive_path))
+    print("Local archive created successfully : {}".format(local_archive_path))
 
     # Extract archive locally
     extraction_path = "/tmp/"
