@@ -77,16 +77,26 @@ def do_deploy(archive_path):
 
     return True
 
-
 def deploy():
     """
     Main deployment function.
     Calls do_pack() to create the archive and do_deploy() to distribute it.
     """
-    new_archivepath = do_pack()
-    if not new_archivepath:
+    local_archive_path = do_pack()
+    if not local_archive_path:
+        print("Failed to create archive. Deployment aborted.")
         return False
-    deploy_result = do_deploy(new_archivepath)
-    return deploy_result
 
+    print("Local archive created successfully at: {}".format(local_archive_path))
+
+    deploy_result = do_deploy(local_archive_path)
+
+    if deploy_result:
+        print("Deployment successful!")
+        return True
+    else:
+        print("Deployment failed!")
+        return False
+
+# Call deploy function
 deploy()
