@@ -76,11 +76,10 @@ def do_deploy(archive_path):
     print("New version deployed!")
 
     return True
-
 def deploy():
     """
     Main deployment function.
-    Calls do_pack() to create the archive and do_deploy() to distribute it.
+    Creates and deploys a new version locally.
     """
     local_archive_path = do_pack()
     if not local_archive_path:
@@ -89,14 +88,17 @@ def deploy():
 
     print("Local archive created successfully at: {}".format(local_archive_path))
 
-    deploy_result = do_deploy(local_archive_path)
+    # Extract archive locally
+    extraction_path = "extracted_version"
+    local("mkdir -p {}".format(extraction_path))
+    local("tar -xzf {} -C {}".format(local_archive_path, extraction_path))
 
-    if deploy_result:
-        print("Deployment successful!")
-        return True
-    else:
-        print("Deployment failed!")
-        return False
+    # Update current symlink to point to the new version
+    local("rm -rf /data/web_static/current")
+    local("ln -s {}/web_static /data/web_static/current".format(extraction_path))
+
+    print("Deployment successful!")
+    return True
 
 # Call deploy function
 deploy()
