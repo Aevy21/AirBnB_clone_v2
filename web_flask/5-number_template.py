@@ -26,6 +26,7 @@ def c_text(text):
     return f'C {text_with_spaces}'
 
 # Route 4: Display "Python " followed by the value of the text variable
+@app.route('/python/', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def python_text(text='is_cool'):
     # Replace underscore symbols (_) with a space
