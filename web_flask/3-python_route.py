@@ -10,16 +10,22 @@ from werkzeug.utils import escape
 app = Flask(__name__)
 
 # Route 1: Display "Hello HBNB!"
+
+
 @app.route('/', strict_slashes=False)
 def hello_hbnb():
     return 'Hello HBNB!'
 
 # Route 2: Display "HBNB"
+
+
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
     return 'HBNB'
 
 # Route 3: Display "C " followed by the value of the text variable
+
+
 @app.route('/c/<text>', strict_slashes=False)
 def c_text(text):
     # Replace underscore symbols (_) with a space
@@ -27,10 +33,13 @@ def c_text(text):
     return f'C {escape(text_with_spaces)}'
 
 # Route 4: Display "Python " followed by the value of the text variable
+
+
 @app.route('/python/<text>', strict_slashes=False)
 def python_text(text='is_cool'):
     text_with_spaces = text.replace('_', ' ')
     return f'Python {escape(text_with_spaces)}'
+
 
 if __name__ == '__main__':
     # Run the app on 0.0.0.0, port 5000
