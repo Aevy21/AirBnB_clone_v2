@@ -34,7 +34,7 @@ def c_text(text):
 
 # Route 4: Display "Python " followed by the value of the text variable
 
-app.route('/python/', strict_slashes=False)
+@app.route('/python/', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def python_text(text='is_cool'):
     text_with_spaces = text.replace('_', ' ')
