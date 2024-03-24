@@ -19,9 +19,7 @@ class State(BaseModel, Base):
     else:
         @property
         def cities(self):
-            from models import storage  # Import locally here
-            cities_list = []
-            for city in storage.all("City").values():
-                if city.state_id == self.id:
-                    cities_list.append(city)
-                    return cities_list
+            """Lists instances of City with state_id == to current State.id"""
+            from models import storage
+            return [city for city in storage.all(City).values()
+                    if city.state_id == self.id]
