@@ -25,11 +25,3 @@ class State(BaseModel, Base):
                 if city.state_id == self.id:
                     cities_list.append(city)
                     return cities_list
-        @cities.setter
-        def cities(self, value):
-            """ Setter method for cities """
-            from models import storage
-            if isinstance(value, City):
-                if value.state_id == self.id:
-                    storage.new(value)
-                    storage.save()
