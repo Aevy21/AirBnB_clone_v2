@@ -29,7 +29,7 @@ def states_list():
 @app.route('/states/<id>', strict_slashes=False)
 def state_id(id):
     """Displays dynamic HTML page for URI `/states/<id>`"""
-    all_states = storage.all("State").values()
+    all_states = storage.all(State).values()
     for state in all_states:
         if id == state.id:
             return render_template("9-states.html", state=state)
