@@ -27,16 +27,13 @@ def states_list():
 
 
 @app.route('/states/<id>', strict_slashes=False)
-def state_cities(id):
-    """Displays cities linked to a State"""
-    state = storage.get(State, id)
-    if state:
-        cities = state.cities if hasattr(state, 'cities') else state.cities()
-        sorted_cities = sorted(cities, key=lambda x: x.name)
-        return render_template('state_cities.html', state=state, cities=sorted_cities)
-    else:
-        return render_template('not_found.html')
-
+def state_id(id):
+    """Displays dynamic HTML page for URI `/states/<id>`"""
+    all_states = storage.all("State").values()
+    for state in all_states:
+        if id == state.id:
+            return render_template("9-states.html", state=state)
+    return render_template("9-states.html")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
