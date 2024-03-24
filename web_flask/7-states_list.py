@@ -16,13 +16,11 @@ def teardown_session(exception):
     storage.close()
 
 
-@app.route('/states_list', strict_slashes=False)
+@app.route("/states_list", strict_slashes=False)
 def states_list():
     """Displays a list of all State objects sorted by name"""
-    states = storage.all(State).values()
-    sorted_states = sorted(states, key=lambda x: x.name)
-
-    return render_template('states_list.html', states=sorted_states)
+    states = storage.all("State").values()
+    return render_template("7-states_list.html", states=sorted_states")
 
 
 if __name__ == "__main__":
