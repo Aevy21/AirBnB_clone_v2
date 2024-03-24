@@ -17,15 +17,21 @@ class State(BaseModel, Base):
         cities = relationship(
             "City", backref="state", cascade="all, delete")
     else:
-        # For FileStorage
         @property
-        
         def cities(self):
-            from models import storage  # Import locally here
-            cities_list = []
-            for city in storage.all("City").values():
-                if city.state_id == self.id:
-                    cities_list.append(city)
-                    return cities_list
-                else:
-                    cities = relationship("City", backref="state", cascade="all, delete-orphan")
+            """
+            Get a list of City instances with
+            state_id equals to the current State.id.
+            """
+            curr = models.storage.all()
+            lists = []
+            res = []
+            for key in curr:
+                city = key.replace('.', ' ')
+                city = shlex.split(city)
+                if (city[0] == 'City'):
+                    lists.append(curr[key])
+            for lis in lists:
+                if (lis.state_id == self.id):
+                    res.append(lis)
+            return (res)
