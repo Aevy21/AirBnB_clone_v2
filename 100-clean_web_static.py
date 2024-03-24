@@ -106,19 +106,12 @@ def deploy():
 
 
 # Call deploy function
-deploy()#!/usr/bin/python3
+deploy()  # !/usr/bin/python3
 """
 This script generates a .tgz archive from the web_static folder
 and distributes it to web servers using Fabric.
 """
 
-
-from fabric.api import *
-from fabric.api import runs_once
-from fabric.api import env
-from fabric.api import local
-from os.path import exists
-from datetime import datetime
 
 env.hosts = ["54.165.47.248", "100.25.193.107"]
 env.user = "ubuntu"
@@ -214,6 +207,7 @@ def deploy():
 # Call deploy function
 deploy()
 
+
 def do_clean(number=0):
     """
     Deletes out-of-date archives
@@ -223,7 +217,8 @@ def do_clean(number=0):
     else:
         number = int(number)
 
-    archives_to_keep = sorted(run('ls -1 /data/web_static/releases').split('\r\n'))[-number:]
+    archives_to_keep = sorted(
+        run('ls -1 /data/web_static/releases').split('\r\n'))[-number:]
 
     with cd('/data/web_static/releases'):
         for archive in run('ls -1').split('\r\n'):

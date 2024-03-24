@@ -81,4 +81,6 @@ class FileStorage:
             key = "{}.{}".format(type(obj).__name__, obj.id)
             if key in FileStorage.__objects:
              del FileStorage.__objects[key]
-        
+       
+    def close(self):
+        self.reload()
