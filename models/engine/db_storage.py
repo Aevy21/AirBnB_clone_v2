@@ -34,28 +34,25 @@ class DBStorage:
         if os.getenv('HBNB_ENV') == "test":
             # drop all tables
             Base.metadata.drop_all(self.__engine)
-
     def all(self, cls=None):
-        """Queries current db session all objects depending on class name"""
-        objs_dict = {}
-        classes = {
-            "State": State, "City": City, "User": User, 
-            "Place": Place, "Review": Review, "Amenity": Amenity
-            }
-        if cls:
-            a_class = classes.get(cls, None)
-            objs = self.__session.query(a_class).all()
-            for obj in objs:
-                key = '{}.{}'.format(type(obj).__name__, obj.id)
-                objs_dict[key] = obj
+        classes = {'City': City, 'Place': Place, 'Review': Review,
+                   'State': State, 'User': User}
+        if cls in classes.keys():
+            cls = classes[cls]
+
+        if cls is None:
+            # If cls is not specified, query all objects from all tables
+            objects = []
+            for cl in classes.values():
+                objects += self.__session.query(cl).all()
+            # objects += self.__session.query(State).all()
+            # objects += self.__session.query(City).all()
         else:
-            # classes = [State, City, User, Place, Review, Amenity]
-            for cls in classes.values():
-                objs = self.__session.query(cls).all()
-                for obj in objs:
-                    key = '{}.{}'.format(type(obj).__name__, obj.id)
-                    objs_dict[key] = obj
-        return objs_dict
+            # Query all objects of the specified class
+            objects = self.__session.query(cls).all()
+
+        return {f'{obj.__class__.__name__}.{obj.id}': obj for obj in objects}
+
 
     def new(self, obj):
         """Adds objects to the current db session"""
