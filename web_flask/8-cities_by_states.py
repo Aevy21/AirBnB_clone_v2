@@ -19,11 +19,8 @@ def teardown_session(exception):
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
     """Displays a list of states and cities"""
-    states = storage.all(State).values()
-    sorted_states = sorted(states, key=lambda x: x.name)
-
-    return render_template('cities_by_states.html', states=sorted_states)
-
+    states = storage.all("State").values()
+    return render_template("8-cities_by_states.html", states=states)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
