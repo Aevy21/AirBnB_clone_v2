@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<HTML LANG="en">
+
+<HEAD>
+    <META CHARSET="UTF-8">
+    <META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+    <TITLE>Cities by States</TITLE>
+</HEAD>
+
+<BODY>
+    <H1>States</H1>
+    <UL>
+        {% for state in states %}
+        <LI>{{ state.id }}: <B>{{ state.name }}</B>
+            <UL>
+                {% if 'cities' in state.__dict__ %}
+                {% for city in state.cities %}
+                <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
+                {% endfor %}
+                {% endif %}
+            </UL>
+        </LI>
+        {% endfor %}
+    </UL>
+</BODY>
+
+</HTML>
