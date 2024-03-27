@@ -21,7 +21,7 @@ def teardown_session(exception):
 def states_list():
     """Displays a list of all State objects sorted by name"""
     states = storage.all(State).values()
-    sorted_states = sorted(states, key=lambda x: x.name)
+    sorted_states = sorted(states, key=lambda state: state.name)
 
     return render_template('states_list.html', states=sorted_states)
 
@@ -33,7 +33,6 @@ def state_id(id):
     for state in all_states:
         if id == state.id:
             return render_template("9-states.html", state=state)
-    return render_template("9-states.html")
 
 
 if __name__ == "__main__":
