@@ -18,7 +18,7 @@ class DBStorage:
     """The Database storage class"""
     __engine = None
     __session = None
-    
+
     def __init__(self):
         """Instatiates class attributes"""
         self.__engine = create_engine(
@@ -34,6 +34,7 @@ class DBStorage:
         if os.getenv('HBNB_ENV') == "test":
             # drop all tables
             Base.metadata.drop_all(self.__engine)
+
     def all(self, cls=None):
         classes = {'City': City, 'Place': Place, 'Review': Review,
                    'State': State, 'User': User}
@@ -53,7 +54,6 @@ class DBStorage:
 
         return {f'{obj.__class__.__name__}.{obj.id}': obj for obj in objects}
 
-
     def new(self, obj):
         """Adds objects to the current db session"""
         self.__session.add(obj)
@@ -68,9 +68,10 @@ class DBStorage:
             self.__session.delete(obj)
 
     def reload(self):
-        """Creates all tables in the db and the current db sesssion""" 
+        """Creates all tables in the db and the current db sesssion"""
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(
+            bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
 
